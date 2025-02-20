@@ -1,5 +1,7 @@
 {DT:Agora}: O meu primeiro projeto pessoal Fullstack para Desafios Técnicos
 Estou desenvolvendo um projeto fullstack chamado DT Agora, um sistema web que reúne desafios técnicos de diversas empresas, abrangendo diferentes linguagens de programação e níveis de dificuldade — tudo em um só lugar.
+
+
 💡 Como surgiu a ideia?
 Duas semanas atrás, enquanto buscava desafios técnicos para treinar para entrevistas, percebi que não havia um local centralizado para encontrá-los. Encontrei alguns vídeos de resoluções, poucos repositórios no GitHub e apenas algumas empresas disponibilizando testes técnicos. Isso me fez desenvolver um único lugar que reunisse diversos desafios usados em entrevistas.
 Além disso, foi a oportunidade perfeita para aprimorar minhas habilidades nas tecnologias que já conheço e aprender novas ferramentas na prática.
