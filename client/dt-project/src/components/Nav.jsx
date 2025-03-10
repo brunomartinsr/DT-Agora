@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AuthContext } from  '../context/AuthContext.jsx'
 
 const NavLinks = () => {
+  const { user, logout } = useContext(AuthContext)
+  console.log(user)
+
   return (
     <div className='flex space-x-6 text-yellow-500 pt-4'>
-        <NavLink to='/sobre' className="hover:underline">Sobre</NavLink>
-        <NavLink to='/conta' className="hover:underline">Conta</NavLink>
+        {user ? (
+            <>
+              <NavLink to='/profile' className="hover:underline">Profile</NavLink>
+              <button onClick={logout} className="hover:underline">
+                Sair
+              </button>
+            </>
+          ):(
+            <>
+              <NavLink to='/login' className="hover:underline">Login</NavLink> 
+            </>
+          )  
+       }
     </div>
 )
 }

@@ -7,6 +7,7 @@ export async function getLanguages() {
         if(languages.length === 0) {
             return { message: "nenhuma linguagem encontrada "}
         }
+
         return languages
 
     } catch(error) {
@@ -21,6 +22,7 @@ export async function chooseChallenges(difficulty, language) {
         if(challenges.length === 0){
             return { message: 'nenhum desafio encontrado' }
         }
+
         return challenges
 
     } catch(error) {
@@ -77,10 +79,27 @@ export async function getOtherChallenges(filters) {
                 return{message: "nenhum desafio encontrado"}
             }
         }
+        
         return challenges
     
     } catch(error) {
         console.log("Erro ao buscar desafios")
+        throw error
+    }
+}
+
+export async function userLogin(loginData) {
+    try {
+        const [user] = await db.query('SELECT * FROM user WHERE user_email = ? AND password = ?', [loginData.userEmail, loginData.userPassword])
+
+        if(user.length === 0) {
+            return null
+        }
+
+        return user[0]
+
+    } catch(error) {
+        console.log("Erro ao logar usuário")
         throw error
     }
 }

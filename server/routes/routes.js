@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { chooseChallenges, getChallengeById, getOtherChallenges, getLanguages } from "../database/repositories/query.js";
+import { chooseChallenges, getChallengeById, getOtherChallenges, getLanguages, userLogin } from "../config/database/repositories/query.js";
+import passport from "passport";
+import { generateToken, verifyToken } from "../config/auth.js";
 
 const router = Router()
 
@@ -77,9 +79,60 @@ router.get('/otherChallenges', async (req, res, next) => {
     }
 })
 
+router.post('/login', async (req, res, next) => {
+    try {
+        const user = await userLogin(req.body)
+
+        if(!user){
+            return res.status(401).json({ message: "usuário não cadastrado" })
+        }
+
+        const token = generateToken(user)
+        res.status(200).json({ token })
+
+    } catch(error) {
+        next(error)
+    }
+})
+
+router.get('/auth/google', 
+    passport.authenticate('google', { scope:['profile', 'email' ]})
+)
+
+router.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        const token = generateToken(req.user)
+        res.redirect(`http://localhost:3000?token=${token}`)
+    }
+)
+
+//ROTA PARA VERIFICAR INFOS DE PERFIL
+// router.get('/profile', verifyToken, (req, res) => {
+//     res.json({ message: "Acesso autorizado", user: req.user })
+// })
+
+router.post('/signup', (req, res, next) => {
+    const userData = req.body
+
+    try {
+        const isRegistered = userRegister(userData)
+
+        if(isRegistered === 0) {
+            return res.status(401).json({ message: isRegistered.message })
+        }
+
+        res.status(200).json(isRegistered)
+    
+    } catch(error) {
+        next(error)
+    }
+
+})
+
 router.use((error, req, res, next) => {
     console.log("erro no servidor", error.message)
-    res.status(500).json({ message:"Erro interno no servidor"})
+    res.status(500).json({ message:"Erro interno no servidor" })
 })
 
 export default router
