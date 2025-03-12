@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { chooseChallenges, getChallengeById, getOtherChallenges, getLanguages, userLogin } from "../config/database/repositories/query.js";
+import { chooseChallenges, getChallengeById, getOtherChallenges, getLanguages, userLogin, userRegister } from "../config/database/repositories/query.js";
 import passport from "passport";
 import { generateToken, verifyToken } from "../config/auth.js";
 
@@ -50,7 +50,6 @@ router.get('/challenge/:id', async (req, res, next) => {
         if(desafioEncontrado.length === 0){
             return res.status(404).json({message: desafioEncontrado.mensage})
         }
-        console.log(desafioEncontrado)
         res.status(200).json(desafioEncontrado)
 
     } catch(error) {
@@ -80,11 +79,12 @@ router.get('/otherChallenges', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
+    const loginData = req.body
     try {
-        const user = await userLogin(req.body)
+        const user = await userLogin(loginData)
 
         if(!user){
-            return res.status(401).json({ message: "usuário não cadastrado" })
+            return res.status(401)
         }
 
         const token = generateToken(user)
@@ -112,22 +112,22 @@ router.get('/auth/google/callback',
 //     res.json({ message: "Acesso autorizado", user: req.user })
 // })
 
-router.post('/signup', (req, res, next) => {
-    const userData = req.body
-
+router.post('/signup', async (req, res, next) => {
+    const registerData = req.body
     try {
-        const isRegistered = userRegister(userData)
+        const userRegistered = await userRegister(registerData)
 
-        if(isRegistered === 0) {
-            return res.status(401).json({ message: isRegistered.message })
+        if(userRegistered === true) {
+            console.log("usuário já cadastrado")
+            return res.status(400)
         }
 
-        res.status(200).json(isRegistered)
+        console.log("usuario cadastrado com sucesso")
+        res.status(201).json(userRegistered)
     
     } catch(error) {
         next(error)
     }
-
 })
 
 router.use((error, req, res, next) => {

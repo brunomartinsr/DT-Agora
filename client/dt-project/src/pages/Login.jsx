@@ -37,7 +37,6 @@ const Login = () => {
   }, [])
 
   const handleCredentialResponse = (response) => {
-    console.log("Google credential response", response);
   
     if (response.credential) {
       const token = response.credential
@@ -96,7 +95,7 @@ const Login = () => {
         <fieldset className='w-[50%] h-[100%] flex flex-col items-center justify-center'>
           <h1 className="text-5xl mb-10 text-yellow-300 font-bold">Login</h1>
           <div className='bg-white flex flex-col h-100 w-[70%] mx-auto pt-10 px-5 rounded-2xl shadow-2xl'>
-            <label htmlFor="email" className="text-xl">Login</label>
+            <label htmlFor="email" className="text-xl">E-mail</label>
             <input 
             type="text" 
             id="email" 
@@ -124,7 +123,7 @@ const Login = () => {
               Entrar
             </button>
             <div id="googleSignInDiv" className="mt-5 flex justify-center"></div>
-            <a href="./Signup.jsx" className="mt-3 mx-auto text-amber-600 underline hover:text-amber-400">Cadastrar-se</a>
+            <a href="/signup" className="mt-3 mx-auto text-amber-600 underline hover:text-amber-400">Cadastrar-se</a>
           </div>
         </fieldset>
 

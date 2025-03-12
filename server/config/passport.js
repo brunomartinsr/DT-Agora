@@ -28,7 +28,6 @@ passport.use(new GoogleStrategy({
         newUser.id = result.insertId
 
         done(null, newUser)
-    
     } 
     catch (error) {
         done(error, null)

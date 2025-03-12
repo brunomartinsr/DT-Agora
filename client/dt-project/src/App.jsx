@@ -3,7 +3,8 @@ import Questions from "./pages/Questions"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Challenge from './pages/Challenge';
-import Login from './pages/login';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
           <Route path='/home' element = {<Home/>} />
           <Route path="/challenge/:id" element={<Challenge/>} />
           <Route path="/login" element={<Login/>} />
+          <Route path="/signup" element={<Signup/>} />
         </Routes>
       </BrowserRouter>
     </>

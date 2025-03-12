@@ -4,7 +4,6 @@ import { AuthContext } from  '../context/AuthContext.jsx'
 
 const NavLinks = () => {
   const { user, logout } = useContext(AuthContext)
-  console.log(user)
 
   return (
     <div className='flex space-x-6 text-yellow-500 pt-4'>

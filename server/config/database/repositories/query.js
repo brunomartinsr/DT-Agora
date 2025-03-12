@@ -1,4 +1,5 @@
 import db from '../connection.js'
+import bcrypt from 'bcrypt'
 
 export async function getLanguages() {
     try {
@@ -88,18 +89,57 @@ export async function getOtherChallenges(filters) {
     }
 }
 
+export async function getUser(registerData) {
+    const [user] = await db.query('SELECT * FROM user WHERE user_email = ?', [registerData.userEmail])
+
+    if(user.length === 0) {
+        return null
+    }
+    return user[0]
+}
+
+export async function checkPassword(password, loginPassword) {
+    const isPasswordValid = await bcrypt.compare(password, loginPassword)
+    return isPasswordValid
+}
+
 export async function userLogin(loginData) {
     try {
-        const [user] = await db.query('SELECT * FROM user WHERE user_email = ? AND password = ?', [loginData.userEmail, loginData.userPassword])
+        const user = await getUser(loginData)
 
-        if(user.length === 0) {
+        if(user === null) {
+            return null
+        }
+        if(!(await checkPassword(loginData.userPassword, user.password))){
             return null
         }
 
-        return user[0]
+        return user
 
     } catch(error) {
         console.log("Erro ao logar usuário")
+        throw error
+    }
+}
+
+export async function userRegister(registerData) {
+    try {
+        let user = await getUser(registerData)
+
+        if(user != null) {
+            return true
+        }
+        
+        const hashedPassword = await bcrypt.hash(registerData.userPassword, 10)
+        
+        await db.query(`INSERT INTO user (user_name, user_email, password) VALUES(?, ?, ?)`, 
+            [registerData.userName, registerData.userEmail, hashedPassword]
+        )
+
+        return user
+    }
+    catch(error) {
+        console.log("erro ao registrar usuário")
         throw error
     }
 }
